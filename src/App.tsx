@@ -2,17 +2,18 @@ import { useState, useRef, useEffect } from "react"
 import Die from "./Die.tsx"
 import { nanoid } from "nanoid"
 import Confetti from "react-confetti"
+import type {JSX} from 'react'
 
-export default function App() {
+export default function App(): JSX.Element {
     const [dice, setDice] = useState(() => generateAllNewDice())
-    const buttonRef = useRef(null)
+    const buttonRef = useRef<HTMLButtonElement>(null);
 
     const gameWon = dice.every(die => die.isHeld) &&
         dice.every(die => die.value === dice[0].value)
         
     useEffect(() => {
-        if (gameWon) {
-            buttonRef.current.focus()
+        if (gameWon && buttonRef.current) {
+            buttonRef.current.focus();
         }
     }, [gameWon])
 
@@ -38,7 +39,7 @@ export default function App() {
         }
     }
 
-    function hold(id) {
+    function hold(id: string) {
         setDice(oldDice => oldDice.map(die =>
             die.id === id ?
                 { ...die, isHeld: !die.isHeld } :
@@ -62,7 +63,7 @@ export default function App() {
                 {gameWon && <p>Congratulations! You won! Press "New Game" to start again.</p>}
             </div>
             <h1 className="title">Tenzies</h1>
-            <p className="instructions">Roll until all dice are the same. Click each die to freeze it at its current value between rolls.</p>
+            <p className="instructions">Roll until all dice are the same.<br /> Click each die to freeze it at its current value between rolls.</p>
             <div className="dice-container">
                 {diceElements}
             </div>
